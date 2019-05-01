@@ -8,6 +8,7 @@
 
 import React, {Component} from 'react';
 import Option from './Option';
+import Question from './question';
 import {
   Platform, TouchableHighlight, TouchableOpacity, 
   Alert, StyleSheet, Text, View} 
@@ -21,8 +22,7 @@ export default class Quiz extends Component{
         optionSelected:null,
         isAnswerCorrect:null,
         answerSubmitted:false,
-        toggleSubmitBtn:false
-
+        toggleSubmitBtn:false,
     }   
     
     isAnswerSubmitted=()=>{
@@ -30,7 +30,7 @@ export default class Quiz extends Component{
     }
 
     isCorrectAnswer=(optionIdx)=>{
-        return this.props.quiz.answer===optionIdx;
+        return +this.props.quiz.answer===optionIdx;
     }
 
     optionSelectHandler=(optionId)=>{
@@ -39,7 +39,6 @@ export default class Quiz extends Component{
             toggleSubmitBtn:true,
         })
 
-        // console.log('option Id selected', this.props.optionId);
     }
 
     isSelected=(optionIndex)=>{
@@ -62,11 +61,11 @@ export default class Quiz extends Component{
         }
     }
 
-  
 
   renderOptions=()=>{
       const options=[];
-      for(let i=1;i<=4;i++){
+      let numOfOption = this.props.fiftyFifty ? 2 : 4;
+      for(let i=1;i<=numOfOption;i++){
           options.push(<Option 
             key={i} 
             option={this.props.quiz.options[i]} 
@@ -75,7 +74,6 @@ export default class Quiz extends Component{
             isCorrectAnswer={this.isCorrectAnswer(i)}
             optionId={i}
             optionSelectHandler={this.optionSelectHandler}/>)
-        //   options.push(<Text key={i} style={styles.options}>{this.props.quiz.options[i]}</Text>)
       }
       return options;
   }
@@ -87,21 +85,13 @@ export default class Quiz extends Component{
   
   render() {
     return (
-      <View style={styles.container}>
-          <View style={styles.lifeLine}>
-            <Text>50/50</Text>
-            <Text>Hint</Text>
-          </View>
-
-          <View style={styles.quiz}>
-            <Text style={styles.question}>{this.props.quiz.question}</Text>
-
-            <Text style={styles.questionInNepali}>{this.props.quiz.questionInNep}</Text>
-
-            <View>
-                {this.state.isAnswerCorrect === 'correct' ? <Text style={styles.correct}>Correct</Text> : null}
-                {this.state.isAnswerCorrect === 'incorrect' ? <Text style={styles.inCorrect}>Incorrect</Text>:null}
-            </View>
+        <>
+           
+          <View style={styles.quizContainer}>
+            <Question isAnswerCorrect={this.state.isAnswerCorrect}
+              quiz={this.props.quiz}
+            />
+            
           </View>  
 
           <View style={styles.optionsContainer}>
@@ -121,72 +111,32 @@ export default class Quiz extends Component{
             </TouchableOpacity> : null}
         </View>
 
-      </View>
+      </>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    // justifyContent: 'center',
-    marginTop:20,
-    marginBottom:20,
-    // alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  lifeLine: {
-    flex:1,
-    fontSize: 20,
-    flexDirection:'row',
-    // alignItems:'stretch',
-    // textAlign: 'center',
-    backgroundColor:'yellow',
-    margin: 10,
-  },
-  quiz:{
+  quizContainer:{
     flex:2,
     // alignItems:'stretch',
     backgroundColor:'blue',
     // textAlign: 'center',
     justifyContent:'space-between',
     flexWrap:'wrap',
-    margin: 10,
+    marginHorizontal: 10,
+    marginVertical:5
 },
-  question:{
-    fontSize: 30,
-    color:'white',
-    textAlign:'center'
-  },
-  questionInNepali:{
-    fontFamily:"Preeti",
-    fontSize: 40,
-    color:'white',
-    textAlign:'center'
-  },
+ 
   optionsContainer:{
     flex:2,
     flexDirection:'row',
     flexWrap:'wrap',
     justifyContent:'space-around',
     backgroundColor:'grey',
-    // alignItems:'center',
-    margin:10,
+    marginHorizontal: 10,
+    marginVertical:5
   },
-
-    correct:{
-        backgroundColor:'green',
-        color:'white',
-        fontSize:25,
-        textAlign:'center'
-    },
-  
-    inCorrect:{
-        backgroundColor:'red',
-        color:'white',
-        fontSize:25,
-        textAlign:'center'
-    },
   
   button:{
     marginTop:40,
