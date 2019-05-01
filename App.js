@@ -4,7 +4,7 @@ import Quiz from './src/components/Quiz';
 export default class App extends Component{
 
   state={
-    currentQuizId:-1,
+    id:1,
     quiz:[]
   }
 
@@ -12,19 +12,22 @@ export default class App extends Component{
     Alert.alert('You tapped a button!')
   }
 
+  nextQuizHandler=()=>{
+    this.setState({id:this.state.id+1})
+  }
 
-
-  getNextQuiz=()=>{
-    return this.state.quiz[this.state.currentQuizId+1];
+  getQuiz=()=>{
+    return this.state.quiz[this.state.id-1];
   }
 
   componentWillMount(){
 
     this.setState({
-        currentQuizId:-1,
+      
         quiz:[{
             id:1,
             question:'What is the height of Mt. Everest?',
+            questionInNep:';u/dfyf lxdfnsf] prfO{ slt 5 <',
             options:{
                 1:'8484 meter',
                 2:'8848 meter',
@@ -62,7 +65,7 @@ export default class App extends Component{
   render() {
     
     return (
-      <Quiz quiz={this.getNextQuiz()}/>
+      <Quiz key={this.state.id} quiz={this.getQuiz()} nextQuiz={this.nextQuizHandler}/>
     );
   }
 }

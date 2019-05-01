@@ -3,12 +3,20 @@ import {StyleSheet,Text, TouchableOpacity} from 'react-native';
 
 export default class Option extends Component {
 
+    state={
+        selectedOptionId:null
+    }
 
+    // isSelected=()=>{
+    //     return this.props.optionId ? styles.selectedOption:null;
+    // }
 
     render() {
         return (
             <TouchableOpacity onPress={()=>this.props.optionSelectHandler(this.props.optionId)}>
-                <Text style={styles.options}>{this.props.option}</Text>
+                <Text style={[styles.options, 
+                    this.props.isSelected && styles.selectedOption,
+                    this.props.isAnswerSubmitted && this.props.isCorrectAnswer && styles.correctAnswer]}>{this.props.option}</Text>
             </TouchableOpacity>
         );
     }
@@ -16,10 +24,19 @@ export default class Option extends Component {
 
 const styles = StyleSheet.create({
     options:{
-        width:120,
+        width:130,
         marginVertical:30,
+        marginHorizontal:10,
         fontSize:20,
         textAlign:'center',
         backgroundColor:'yellow',
-      }
+      },
+    selectedOption:{
+        backgroundColor:'orange',
+        color:'blue'
+    },
+    correctAnswer:{
+        backgroundColor:'green',
+        color:'white'
+    }
 });
