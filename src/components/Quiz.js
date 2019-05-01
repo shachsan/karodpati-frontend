@@ -47,7 +47,7 @@ export default class Quiz extends Component{
     }
 
     checkAnswer=()=>{
-        if(this.state.optionSelected===this.props.quiz.answer){
+        if(this.state.optionSelected===+this.props.quiz.answer){
             this.setState({
                 isAnswerCorrect:'correct',
                 answerSubmitted:true,
