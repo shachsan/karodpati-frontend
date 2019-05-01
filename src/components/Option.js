@@ -13,7 +13,7 @@ export default class Option extends Component {
 
     render() {
         return (
-            <TouchableOpacity onPress={()=>this.props.optionSelectHandler(this.props.optionId)}>
+            <TouchableOpacity disabled={this.props.isAnswerSubmitted} onPress={()=>this.props.optionSelectHandler(this.props.optionId)}>
                 <Text style={[styles.options, 
                     this.props.isSelected && styles.selectedOption,
                     this.props.isAnswerSubmitted && this.props.isCorrectAnswer && styles.correctAnswer]}>{this.props.option}</Text>
