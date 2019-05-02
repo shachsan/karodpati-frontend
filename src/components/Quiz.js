@@ -23,6 +23,7 @@ export default class Quiz extends Component{
         isAnswerCorrect:null,
         answerSubmitted:false,
         toggleSubmitBtn:false,
+        optionsToRender:[+this.props.quiz.answer]
     }   
     
     isAnswerSubmitted=()=>{
@@ -64,8 +65,8 @@ export default class Quiz extends Component{
 
   renderOptions=()=>{
       const options=[];
-      let numOfOption = this.props.fiftyFifty ? 2 : 4;
-      for(let i=1;i<=numOfOption;i++){
+      // let numOfOption = this.props.fiftyFifty ? 2 : 4;
+      for(let i=1;i<=4;i++){
           options.push(<Option 
             key={i} 
             option={this.props.quiz.options[i]} 
@@ -73,9 +74,15 @@ export default class Quiz extends Component{
             isAnswerSubmitted={this.isAnswerSubmitted()}
             isCorrectAnswer={this.isCorrectAnswer(i)}
             optionId={i}
+            fiftyFifty={this.props.fiftyFifty}
+            optionsToRender={this.state.optionsToRender}
             optionSelectHandler={this.optionSelectHandler}/>)
       }
       return options;
+  }
+
+  getRandomIdx=()=>{
+    return Math.ceil(Math.random()*4);
   }
 
   componentDidMount(){
@@ -84,6 +91,19 @@ export default class Quiz extends Component{
 
   
   render() {
+    console.log('optionsToBeRendered:', this.state.optionsToRender);
+    if(this.props.fiftyFifty && this.state.optionsToRender.length<2){
+      // let optionsToRender=[+this.props.quiz.answer];
+      let secondNum = this.getRandomIdx();
+      console.log('answer id:', this.props.quiz.answer);
+      while(secondNum===+this.props.quiz.answer){
+        secondNum=this.getRandomIdx();
+        console.log('inside while loop, secondNum:',secondNum);
+      }
+      this.setState({
+        optionsToRender:[...this.state.optionsToRender,secondNum]
+      })
+    }
     return (
         <>
            

@@ -10,6 +10,7 @@ export default class App extends Component{
     id:1,
     quiz:[],
     fiftyFifty:false,
+    
   }
 
  
