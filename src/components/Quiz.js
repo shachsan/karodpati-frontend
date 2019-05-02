@@ -64,20 +64,27 @@ export default class Quiz extends Component{
 
 
   renderOptions=()=>{
+
+      //TODO: randomly arrange Options in an array
+      
       const options=[];
+      // const shuffledOptions=[];
       // let numOfOption = this.props.fiftyFifty ? 2 : 4;
-      for(let i=1;i<=4;i++){
+      for(let i=0;i<4;i++){
+        // let idx = Math.floor(Math.random()*(4-i));
+          // options.splice(idx, 0, <Option 
           options.push(<Option 
-            key={i} 
-            option={this.props.quiz.options[i]} 
-            isSelected={this.isSelected(i)}
+            key={i+1} 
+            option={this.props.quiz.options[i+1]} 
+            isSelected={this.isSelected(i+1)}
             isAnswerSubmitted={this.isAnswerSubmitted()}
-            isCorrectAnswer={this.isCorrectAnswer(i)}
-            optionId={i}
+            isCorrectAnswer={this.isCorrectAnswer(i+1)}
+            optionId={i+1}
             fiftyFifty={this.props.fiftyFifty}
             optionsToRender={this.state.optionsToRender}
             optionSelectHandler={this.optionSelectHandler}/>)
       }
+
       return options;
   }
 
