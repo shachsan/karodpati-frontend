@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { 
     View, 
     Text, 
+    Button,
     TouchableOpacity, 
     StyleSheet, 
     Picker, 
@@ -13,7 +14,9 @@ export default class QuizPrep extends Component {
     state={
         form:{
             numOfQuiz:5,
-            mainCat:'',
+            // selectedIndex:1,
+            categoryInternational:false,
+            categoryNational:true,
             selectedCat:[],
             subCat:[],
             level:''
@@ -26,12 +29,25 @@ export default class QuizPrep extends Component {
 
     selectMainCats=(selectedIndex)=>{
         console.log('selected Index', selectedIndex);
-        newCat=[...this.state.selectedCat]
-        newCat.push(selectedIndex)
-       this.setState({selectedCat:newCat})
+        newCat={...this.state.form}
+        newCat.selectedCat.push(selectedIndex)
+        console.log('selected category:', newCat.selectedCat);
+       this.setState({form:newCat})
     }
+
+    handleCategoryOnPress=(e)=>{
+        console.log('target', e.target);
+        this.setState({
+            // categoryInternational:!this.state.form.categoryInternational,
+        })
+    }
+
+    submitHandler=()=>{
+
+    }
+
     render() {
-        console.log('selected category:', this.state.mainCat);
+        const {navigate} = this.props.navigation;
         //TODO: dynamically generate below array
         quizQty=[ <Picker.Item key={5} label="5" value="5" />,
                     <Picker.Item key={10} label="10" value="10" />,
@@ -43,7 +59,7 @@ export default class QuizPrep extends Component {
                     <Picker.Item key={40} label="40" value="40" />
                 ]
         mainCategories=["Internation", "National", "Both"];
-        const {mainCat} = this.state;
+        const {selectedIndex} = this.state.form;
 
         return (
              <View style={styles.container}>
@@ -58,24 +74,36 @@ export default class QuizPrep extends Component {
 
                 <View style={styles.category}>
                     <Text>Choose Question Categories</Text>
-                    <ButtonGroup 
+                    <TouchableOpacity onPress={this.handleCategoryOnPress}>
+                        <Text style={styles.categoryText}>International</Text>
+                    </TouchableOpacity >
+                    <TouchableOpacity onPress={this.handleCategoryOnPress}>
+                        <Text style={styles.categoryText}>National</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={this.handleCategoryOnPress}>
+                        <Text style={styles.categoryText}>Any</Text>
+                    </TouchableOpacity>
+
+                    {/* <ButtonGroup 
                         onPress={this.selectMainCats}
-                        selectedIndex={mainCat}
+                        selectedIndex={selectedIndex}
                         buttons={mainCategories}
                         containerStyle={{height: 100}}
                         selectMutiple={true}
-                    />
+                    /> */}
                     {/* <Button style={styles.mainCatBtns} title="International">International</Button>
                     <Button style={styles.mainCatBtns} title="National">National</Button>
                     <Button style={styles.mainCatBtns} title="Both">Both</Button> */}
                 </View>
-                <View style={styles.category}>
-                    <Text>Choose Question Categories</Text>
+                    
+                <View style={styles.qyestionTypes}>
+                    <View style={{width:400, alignItems:'center'}}><Text>Question Types</Text></View>
+                    <TouchableOpacity onPress={this.handleCategoryOnPress}><Text style={styles.questionTypeText}>Easy</Text></TouchableOpacity>
+                    <Text style={styles.questionTypeText}>Medium</Text>
+                    <Text style={styles.questionTypeText}>Hard</Text>
+                    <View style={styles.submit}><Button color='white' title="Submit" onPress={()=>navigate('Quiz')}/></View>
                 </View>
-                <View style={styles.category}>
-                    <Text>Choose Question Categories</Text>
-                </View>
-
+               
              </View>
         );
     }
@@ -106,7 +134,40 @@ const styles = StyleSheet.create({
 
     category:{
         flex:1,
-        justifyContent:'flex-start'
+        alignItems:'center',
+        // marginBottom:30
+    },
+
+    categoryText:{
+        // width:40,
+        padding:10,
+        margin:5,
+        borderWidth:1,
+        borderColor:'black'
+
+    },
+
+    qyestionTypes:{
+        flex:1,
+        flexDirection:'row',
+        justifyContent:'center',
+        flexWrap:'wrap',
+    
+    },
+
+    questionTypeText:{
+        margin:20,
+        padding:10,
+        width:80,
+        borderWidth:1,
+        borderColor:'black',
+        textAlign:'center'
+    },
+
+    submit:{
+        borderWidth:1,
+        backgroundColor:'blue',
+        width:100
     },
     header:{
         fontSize:35,
