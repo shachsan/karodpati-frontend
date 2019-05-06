@@ -15,11 +15,11 @@ export default class QuizPrep extends Component {
         form:{
             numOfQuiz:5,
             // selectedIndex:1,
-            categoryInternational:false,
-            categoryNational:true,
-            selectedCat:[],
+            categories:{international:false, national:false, any:false},
+            // categoryNational:true,
+            // selectedCat:[],
             subCat:[],
-            level:''
+            level:{easy:false, medium:false, hard:false}
         }
     }
 
@@ -35,10 +35,27 @@ export default class QuizPrep extends Component {
        this.setState({form:newCat})
     }
 
-    handleCategoryOnPress=(e)=>{
-        console.log('target', e.target);
-        this.setState({
-            // categoryInternational:!this.state.form.categoryInternational,
+    handleCategoryOnPress=(cat)=>{
+
+        this.setState(state=>{
+            if(cat==='any'){
+                state.form.categories.international=!state.form.categories.international;
+                state.form.categories.national=!state.form.categories.national;
+                state.form.categories.any=!state.form.categories.any;
+
+                return state;
+            }else{
+
+                state.form.categories[cat]=!state.form.categories[cat];
+                return state;
+            }
+        })
+    }
+
+    handleOnPressLevel=(level)=>{
+        this.setState(state=>{
+            state.form.level[level]=!state.form.level[level]
+            return state;
         })
     }
 
@@ -47,6 +64,7 @@ export default class QuizPrep extends Component {
     }
 
     render() {
+        console.log('state:', this.state);
         const {navigate} = this.props.navigation;
         //TODO: dynamically generate below array
         quizQty=[ <Picker.Item key={5} label="5" value="5" />,
@@ -59,7 +77,8 @@ export default class QuizPrep extends Component {
                     <Picker.Item key={40} label="40" value="40" />
                 ]
         mainCategories=["Internation", "National", "Both"];
-        const {selectedIndex} = this.state.form;
+        const {categories} = this.state.form;
+        const {level}=this.state.form;
 
         return (
              <View style={styles.container}>
@@ -74,13 +93,19 @@ export default class QuizPrep extends Component {
 
                 <View style={styles.category}>
                     <Text>Choose Question Categories</Text>
-                    <TouchableOpacity onPress={this.handleCategoryOnPress}>
-                        <Text style={styles.categoryText}>International</Text>
+                    <TouchableOpacity onPress={()=>this.handleCategoryOnPress("international")}>
+                        <Text style={[
+                            styles.categoryText, 
+                            categories.international ? styles.optionSelected : null
+                            ]}>International</Text>
                     </TouchableOpacity >
-                    <TouchableOpacity onPress={this.handleCategoryOnPress}>
-                        <Text style={styles.categoryText}>National</Text>
+                    <TouchableOpacity onPress={()=>this.handleCategoryOnPress("national")}>
+                        <Text style={[
+                            styles.categoryText,
+                            categories.national ? styles.optionSelected : null
+                            ]}>National</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={this.handleCategoryOnPress}>
+                    <TouchableOpacity onPress={()=>this.handleCategoryOnPress("any")}>
                         <Text style={styles.categoryText}>Any</Text>
                     </TouchableOpacity>
 
@@ -98,11 +123,23 @@ export default class QuizPrep extends Component {
                     
                 <View style={styles.qyestionTypes}>
                     <View style={{width:400, alignItems:'center'}}><Text>Question Types</Text></View>
-                    <TouchableOpacity onPress={this.handleCategoryOnPress}><Text style={styles.questionTypeText}>Easy</Text></TouchableOpacity>
-                    <Text style={styles.questionTypeText}>Medium</Text>
-                    <Text style={styles.questionTypeText}>Hard</Text>
-                    <View style={styles.submit}><Button color='white' title="Submit" onPress={()=>navigate('Quiz')}/></View>
+                    <TouchableOpacity onPress={()=>this.handleOnPressLevel('easy')}>
+                        <Text style={[
+                            styles.questionTypeText,
+                            level.easy ? styles.optionSelected : null
+                            ]}>Easy</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={()=>this.handleOnPressLevel('medium')}>
+                        <Text style={[
+                            styles.questionTypeText,
+                            level.medium ? styles.optionSelected : null
+                            ]}>Medium</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={()=>this.handleOnPressLevel('hard')}>
+                        <Text style={[
+                            styles.questionTypeText,
+                            level.hard ? styles.optionSelected : null
+                            ]}>Hard</Text></TouchableOpacity>
                 </View>
+                    <View style={styles.submit}><Button color='white' title="Submit" onPress={()=>navigate('Quiz')}/></View>
                
              </View>
         );
@@ -115,7 +152,8 @@ const styles = StyleSheet.create({
         // justifyContent:'flex-start',
         alignItems:'center',
         // flexDirection:'row',
-        flexWrap:'wrap'
+        flexWrap:'wrap',
+        marginBottom:80
     },
     label:{
         backgroundColor:'blue',
@@ -158,10 +196,16 @@ const styles = StyleSheet.create({
     questionTypeText:{
         margin:20,
         padding:10,
-        width:80,
+        // width:90,
         borderWidth:1,
         borderColor:'black',
         textAlign:'center'
+    },
+
+    optionSelected:{
+        backgroundColor:'yellow',
+        color:'red',
+        fontSize:20
     },
 
     submit:{
