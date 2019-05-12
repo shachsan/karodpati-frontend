@@ -9,6 +9,10 @@ import {
     Item,
     } from 'react-native';
 import {ButtonGroup} from 'react-native-elements';
+import RNPickerSelect from 'react-native-picker-select';
+
+
+
 
 export default class QuizPrep extends Component {
     state={
@@ -66,31 +70,65 @@ export default class QuizPrep extends Component {
     render() {
         console.log('state:', this.state);
         const {navigate} = this.props.navigation;
+        const placeholder={
+            label:"How many questions would you like to attempt?",
+            value:null
+
+        }
         //TODO: dynamically generate below array
-        quizQty=[ <Picker.Item key={5} label="5" value="5" />,
-                    <Picker.Item key={10} label="10" value="10" />,
-                    <Picker.Item key={15} label="15" value="15" />,
-                    <Picker.Item key={20} label="20" value="20" />,
-                    <Picker.Item key={25} label="25" value="25" />,
-                    <Picker.Item key={30} label="30" value="30" />,
-                    <Picker.Item key={35} label="35" value="35" />,
-                    <Picker.Item key={40} label="40" value="40" />
-                ]
+        // quizQty=[ <Picker.Item key={5} label="5" value="5" />,
+        //             <Picker.Item key={10} label="10" value="10" />,
+        //             <Picker.Item key={15} label="15" value="15" />,
+        //             <Picker.Item key={20} label="20" value="20" />,
+        //             <Picker.Item key={25} label="25" value="25" />,
+        //             <Picker.Item key={30} label="30" value="30" />,
+        //             <Picker.Item key={35} label="35" value="35" />,
+        //             <Picker.Item key={40} label="40" value="40" />
+        //         ]
+        let quizQty=[{
+            label:"5",
+            value:"5"
+        },
+        {
+            label:"10",
+            value:"10"
+        },
+        {
+            label:"15",
+            value:"15"
+        },
+        {
+            label:"20",
+            value:"20"
+        },
+        {
+            label:"25",
+            value:"25"
+        },]
         mainCategories=["Internation", "National", "Both"];
         const {categories} = this.state.form;
         const {level}=this.state.form;
 
         return (
              <View style={styles.container}>
-                <Text style={styles.label}>How many questions would you like to attempt?</Text>
-                <Picker
-                    selectedValue={this.state.numOfQuiz}
-                    style={styles.picker}
-                    onValueChange={(itemValue, itemIndex) =>
-                        this.setState({numOfQuiz: itemValue})
-                    }>{quizQty}
-                </Picker>
-
+                <View style={styles.questionQtyContainer}>
+                    <Text style={styles.label}>How many questions would you like to attempt?</Text>
+                    {/* <Picker
+                        selectedValue={this.state.numOfQuiz}
+                        style={styles.picker}
+                        onValueChange={(itemValue, itemIndex) =>
+                            this.setState({numOfQuiz: itemValue})
+                        }>{quizQty}
+                    </Picker> */}
+                    <RNPickerSelect
+                        placeholder={{}}
+                        items={quizQty}
+                        style={styles.pickerSelect}
+                        onValueChange={(value)=>{
+                            this.setState({numOfQuiz:value})
+                        }}
+                    />
+                </View>
                 <View style={styles.category}>
                     <Text>Choose Question Categories</Text>
                     <TouchableOpacity onPress={()=>this.handleCategoryOnPress("international")}>
@@ -163,15 +201,24 @@ const styles = StyleSheet.create({
         // margin:5,
         padding:5
     },
-    picker:{
-        flex:1,
-        height: 50, 
+    pickerSelect:{
+        // flex:1,
+        height: 100, 
+        fontSize:15,
         width: 100, 
-        marginTop:-30
+        marginTop:30,
+        borderWidth:1,
+        borderColor:'blue'
+
+    },
+
+    questionQtyContainer:{
+        flex:1,
+        alignItems:'center',
     },
 
     category:{
-        flex:1,
+        flex:2,
         alignItems:'center',
         // marginBottom:30
     },
