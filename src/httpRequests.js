@@ -13,3 +13,4 @@ export default{
 }
 
 // module.exports = HttpRequests
+//db.quizes.find({"subcategory":{$in:["Geography", "sports"]}})

@@ -24,14 +24,7 @@ export default class QuizPrep extends Component {
                 national:false, 
                 any:false
             },
-            subCat:{
-                science:false,
-                politics:false,
-                sports:false,
-                geography:false,
-                history:false,
-                art:false, 
-            },
+            subCat:[],
             level:{easy:false, medium:false, hard:false}
         }
     }
@@ -49,7 +42,7 @@ export default class QuizPrep extends Component {
     }
 
     handleCategoryOnPress=(cat)=>{
-
+     
         this.setState(prevState=>{
             if(cat==='any'){
                 console.log('any:',this.state.form.categories.any)
@@ -86,8 +79,19 @@ export default class QuizPrep extends Component {
         })
     }
     handleOnSelectSubcategory=(subCategory)=>{
+        console.log('on press subcategory:', subCategory);
         this.setState(state=>{
-            state.form.subCat[subCategory]=!state.form.subCat[subCategory]
+            let subCatSelected = state.form.subCat.findIndex(subcat=>subcat===subCategory)
+            console.log('subCatSelected;', subCatSelected);
+            if(subCatSelected>=0){
+                console.log('inside subCat true');
+                state.form.subCat.splice(subCatSelected,1);
+            }else{
+                console.log('inside subCat false');
+
+                state.form.subCat.push(subCategory);
+            }
+
             return state;
         })
     }
@@ -165,32 +169,38 @@ export default class QuizPrep extends Component {
                     <TouchableOpacity onPress={()=>this.handleOnSelectSubcategory('science')}>
                         <Text style={[
                             styles.selectionText,
-                            subCat.science ? styles.optionSelected : null
+                            // subCat.science ? styles.optionSelected : null
+                            subCat.includes("science") ? styles.optionSelected : null
                             ]}>Science</Text></TouchableOpacity>
                     <TouchableOpacity onPress={()=>this.handleOnSelectSubcategory('politics')}>
                         <Text style={[
                             styles.selectionText,
-                            subCat.politics ? styles.optionSelected : null
+                            // subCat.politics ? styles.optionSelected : null
+                            subCat.includes("politics") ? styles.optionSelected : null
                             ]}>Politics</Text></TouchableOpacity>
                     <TouchableOpacity onPress={()=>this.handleOnSelectSubcategory('sports')}>
                         <Text style={[
                             styles.selectionText,
-                            subCat.sports ? styles.optionSelected : null
+                            // subCat.sports ? styles.optionSelected : null
+                            subCat.includes("sports") ? styles.optionSelected : null
                             ]}>Sports</Text></TouchableOpacity>
-                    <TouchableOpacity onPress={()=>this.handleOnSelectSubcategory('geography')}>
+                    <TouchableOpacity onPress={()=>this.handleOnSelectSubcategory('Geography')}>
                         <Text style={[
                             styles.selectionText,
-                            subCat.geography ? styles.optionSelected : null
+                            // subCat.geography ? styles.optionSelected : null
+                            subCat.includes("Geography") ? styles.optionSelected : null
                             ]}>Geography</Text></TouchableOpacity>
                     <TouchableOpacity onPress={()=>this.handleOnSelectSubcategory('history')}>
                         <Text style={[
                             styles.selectionText,
-                            subCat.history ? styles.optionSelected : null
+                            // subCat.history ? styles.optionSelected : null
+                            subCat.includes("history") ? styles.optionSelected : null
                             ]}>History</Text></TouchableOpacity>
                     <TouchableOpacity onPress={()=>this.handleOnSelectSubcategory('art')}>
                         <Text style={[
                             styles.selectionText,
-                            subCat.art ? styles.optionSelected : null
+                            // subCat.art ? styles.optionSelected : null
+                            subCat.includes("art") ? styles.optionSelected : null
                             ]}>Art & Culture</Text></TouchableOpacity>
                 </View>
                     
