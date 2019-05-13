@@ -44,7 +44,9 @@ export default class App extends Component{
   }
 
   async componentDidMount(){
-    console.log('1: start component will mount');
+    const {navigation} = this.props;
+    const query = navigation.getParam('query', '');
+    console.log('query props:',query );
     // const httpReq = new httpRequests();
     const data = await httpRequests.getQuiz()
     console.log('data:', data);

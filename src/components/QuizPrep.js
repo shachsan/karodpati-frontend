@@ -19,13 +19,9 @@ export default class QuizPrep extends Component {
     state={
         form:{
             numOfQuiz:5,
-            categories:{
-                international:false, 
-                national:false, 
-                any:false
-            },
+            categories:[],
             subCat:[],
-            level:{easy:false, medium:false, hard:false}
+            level:[]
         }
     }
 
@@ -44,51 +40,39 @@ export default class QuizPrep extends Component {
     handleCategoryOnPress=(cat)=>{
      
         this.setState(prevState=>{
-            if(cat==='any'){
-                console.log('any:',this.state.form.categories.any)
-                console.log('prevState:',prevState)
-                if(prevState.any){
-                    console.log('inside any true');
-                    prevState.form.categories.international=false;
-                    prevState.form.categories.national=false;
-                    // prevState.form.categories.any=!prevState.form.categories.any;
-                
+           
+                let catSelectedIdx = prevState.form.categories.findIndex(category=>category===cat) //returns index of matched element
+                if(catSelectedIdx>=0){
+                    prevState.form.categories.splice(catSelectedIdx,1);
                 }else{
-                    console.log('inside any false');
-                    prevState.form.categories.international=true;
-                    prevState.form.categories.national=true;
-                    // prevState.form.categories.any=!prevState.form.categories.any;
+                    prevState.form.categories.push(cat);
                 }
-        
 
-                return prevState;
-            }else{
-
-                prevState.form.categories[cat]=!prevState.form.categories[cat];
-                prevState.form.categories.any = prevState.form.categories.international && prevState.form.categories.national 
-                ? true : false;
+                // prevState.form.categories[cat]=!prevState.form.categories[cat];
+                // prevState.form.categories.any = prevState.form.categories.international && prevState.form.categories.national 
+                // ? true : false;
                 return prevState;
             }
-        })
+        )
     }
 
     handleOnPressLevel=(level)=>{
         this.setState(state=>{
-            state.form.level[level]=!state.form.level[level]
+            let levelPressed = state.form.level.findIndex(l=>l===level) //returns index of matched element
+            if(levelPressed>=0){
+                state.form.level.splice(levelPressed,1);
+            }else{
+                state.form.level.push(level);
+            }
             return state;
         })
     }
     handleOnSelectSubcategory=(subCategory)=>{
-        console.log('on press subcategory:', subCategory);
         this.setState(state=>{
             let subCatSelected = state.form.subCat.findIndex(subcat=>subcat===subCategory)
-            console.log('subCatSelected;', subCatSelected);
             if(subCatSelected>=0){
-                console.log('inside subCat true');
                 state.form.subCat.splice(subCatSelected,1);
             }else{
-                console.log('inside subCat false');
-
                 state.form.subCat.push(subCategory);
             }
 
@@ -145,22 +129,25 @@ export default class QuizPrep extends Component {
                     <TouchableOpacity onPress={()=>this.handleCategoryOnPress("international")}>
                         <Text style={[
                             styles.selectionText, 
-                            categories.international ? styles.optionSelected : null
+                            // categories.international ? styles.optionSelected : null
+                            categories.includes("international") ? styles.optionSelected : null
                             ]}>International</Text>
                     </TouchableOpacity >
                     <TouchableOpacity onPress={()=>this.handleCategoryOnPress("national")}>
                         <Text style={[
                             styles.selectionText,
-                            categories.national ? styles.optionSelected : null
+                            // categories.national ? styles.optionSelected : null
+                            categories.includes("national") ? styles.optionSelected : null
                             ]}>National</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={()=>this.handleCategoryOnPress("any")}>
+                    {/* <TouchableOpacity onPress={()=>this.handleCategoryOnPress("any")}>
                         <Text style={[
                             styles.selectionText,
-                            categories.international && categories.national ? styles.optionSelected : null
+                            // categories.international && categories.national ? styles.optionSelected : null
+                            categories.includes("international" && "national") ? styles.optionSelected : null
                             ]}>Any</Text>
-                        {/* <Text style={styles.selectionText}>Any</Text> */}
-                    </TouchableOpacity>
+                        {/* <Text style={styles.selectionText}>Any</Text> 
+                    </TouchableOpacity> */}
                 </View>
                 
                 {/* //sub-categories */}
@@ -209,20 +196,24 @@ export default class QuizPrep extends Component {
                     <TouchableOpacity onPress={()=>this.handleOnPressLevel('easy')}>
                         <Text style={[
                             styles.selectionText,
-                            level.easy ? styles.optionSelected : null
-                            ]}>Easy</Text></TouchableOpacity>
+                            // level.easy ? styles.optionSelected : null
+                            level.includes('easy') ? styles.optionSelected : null
+                        ]}>Easy</Text></TouchableOpacity>
                     <TouchableOpacity onPress={()=>this.handleOnPressLevel('medium')}>
                         <Text style={[
                             styles.selectionText,
-                            level.medium ? styles.optionSelected : null
-                            ]}>Medium</Text></TouchableOpacity>
+                            level.includes('medium') ? styles.optionSelected : null
+                            // level.medium ? styles.optionSelected : null
+                        ]}>Medium</Text></TouchableOpacity>
                     <TouchableOpacity onPress={()=>this.handleOnPressLevel('hard')}>
                         <Text style={[
                             styles.selectionText,
-                            level.hard ? styles.optionSelected : null
+                            level.includes('hard') ? styles.optionSelected : null
+                            // level.hard ? styles.optionSelected : null
                             ]}>Hard</Text></TouchableOpacity>
                 </View>
-                    <View style={styles.submit}><Button color='white' title="Submit" onPress={()=>navigate('QuizContainer')}/></View>
+                
+                <View style={styles.submit}><Button color='white' title="Submit" onPress={()=>navigate('QuizContainer', {query:this.state.form})}/></View>
                
              </View>
         );
