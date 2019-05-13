@@ -7,6 +7,7 @@ import {
     StyleSheet, 
     Picker, 
     Item,
+    TextInput,
     } from 'react-native';
 import {ButtonGroup} from 'react-native-elements';
 import RNPickerSelect from 'react-native-picker-select';
@@ -18,11 +19,19 @@ export default class QuizPrep extends Component {
     state={
         form:{
             numOfQuiz:5,
-            // selectedIndex:1,
-            categories:{international:false, national:false, any:false},
-            // categoryNational:true,
-            // selectedCat:[],
-            subCat:[],
+            categories:{
+                international:false, 
+                national:false, 
+                any:false
+            },
+            subCat:{
+                science:false,
+                politics:false,
+                sports:false,
+                geography:false,
+                history:false,
+                art:false, 
+            },
             level:{easy:false, medium:false, hard:false}
         }
     }
@@ -41,17 +50,31 @@ export default class QuizPrep extends Component {
 
     handleCategoryOnPress=(cat)=>{
 
-        this.setState(state=>{
+        this.setState(prevState=>{
             if(cat==='any'){
-                state.form.categories.international=!state.form.categories.international;
-                state.form.categories.national=!state.form.categories.national;
-                state.form.categories.any=!state.form.categories.any;
+                console.log('any:',this.state.form.categories.any)
+                console.log('prevState:',prevState)
+                if(prevState.any){
+                    console.log('inside any true');
+                    prevState.form.categories.international=false;
+                    prevState.form.categories.national=false;
+                    // prevState.form.categories.any=!prevState.form.categories.any;
+                
+                }else{
+                    console.log('inside any false');
+                    prevState.form.categories.international=true;
+                    prevState.form.categories.national=true;
+                    // prevState.form.categories.any=!prevState.form.categories.any;
+                }
+        
 
-                return state;
+                return prevState;
             }else{
 
-                state.form.categories[cat]=!state.form.categories[cat];
-                return state;
+                prevState.form.categories[cat]=!prevState.form.categories[cat];
+                prevState.form.categories.any = prevState.form.categories.international && prevState.form.categories.national 
+                ? true : false;
+                return prevState;
             }
         })
     }
@@ -59,6 +82,12 @@ export default class QuizPrep extends Component {
     handleOnPressLevel=(level)=>{
         this.setState(state=>{
             state.form.level[level]=!state.form.level[level]
+            return state;
+        })
+    }
+    handleOnSelectSubcategory=(subCategory)=>{
+        this.setState(state=>{
+            state.form.subCat[subCategory]=!state.form.subCat[subCategory]
             return state;
         })
     }
@@ -70,21 +99,6 @@ export default class QuizPrep extends Component {
     render() {
         console.log('state:', this.state);
         const {navigate} = this.props.navigation;
-        const placeholder={
-            label:"How many questions would you like to attempt?",
-            value:null
-
-        }
-        //TODO: dynamically generate below array
-        // quizQty=[ <Picker.Item key={5} label="5" value="5" />,
-        //             <Picker.Item key={10} label="10" value="10" />,
-        //             <Picker.Item key={15} label="15" value="15" />,
-        //             <Picker.Item key={20} label="20" value="20" />,
-        //             <Picker.Item key={25} label="25" value="25" />,
-        //             <Picker.Item key={30} label="30" value="30" />,
-        //             <Picker.Item key={35} label="35" value="35" />,
-        //             <Picker.Item key={40} label="40" value="40" />
-        //         ]
         let quizQty=[{
             label:"5",
             value:"5"
@@ -106,90 +120,121 @@ export default class QuizPrep extends Component {
             value:"25"
         },]
         mainCategories=["Internation", "National", "Both"];
-        const {categories} = this.state.form;
-        const {level}=this.state.form;
+        const {categories, level, subCat} = this.state.form;
 
         return (
              <View style={styles.container}>
                 <View style={styles.questionQtyContainer}>
                     <Text style={styles.label}>How many questions would you like to attempt?</Text>
-                    {/* <Picker
-                        selectedValue={this.state.numOfQuiz}
-                        style={styles.picker}
-                        onValueChange={(itemValue, itemIndex) =>
-                            this.setState({numOfQuiz: itemValue})
-                        }>{quizQty}
-                    </Picker> */}
+                
                     <RNPickerSelect
                         placeholder={{}}
                         items={quizQty}
-                        style={styles.pickerSelect}
+                        // style={pickerStyles}
                         onValueChange={(value)=>{
                             this.setState({numOfQuiz:value})
                         }}
                     />
                 </View>
-                <View style={styles.category}>
-                    <Text>Choose Question Categories</Text>
+                <View style={styles.selections}>
+                    <View style={{width:400, alignItems:'center'}}><Text>Choose Categories</Text></View>
                     <TouchableOpacity onPress={()=>this.handleCategoryOnPress("international")}>
                         <Text style={[
-                            styles.categoryText, 
+                            styles.selectionText, 
                             categories.international ? styles.optionSelected : null
                             ]}>International</Text>
                     </TouchableOpacity >
                     <TouchableOpacity onPress={()=>this.handleCategoryOnPress("national")}>
                         <Text style={[
-                            styles.categoryText,
+                            styles.selectionText,
                             categories.national ? styles.optionSelected : null
                             ]}>National</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={()=>this.handleCategoryOnPress("any")}>
-                        <Text style={styles.categoryText}>Any</Text>
+                        <Text style={[
+                            styles.selectionText,
+                            categories.international && categories.national ? styles.optionSelected : null
+                            ]}>Any</Text>
+                        {/* <Text style={styles.selectionText}>Any</Text> */}
                     </TouchableOpacity>
-
-                    {/* <ButtonGroup 
-                        onPress={this.selectMainCats}
-                        selectedIndex={selectedIndex}
-                        buttons={mainCategories}
-                        containerStyle={{height: 100}}
-                        selectMutiple={true}
-                    /> */}
-                    {/* <Button style={styles.mainCatBtns} title="International">International</Button>
-                    <Button style={styles.mainCatBtns} title="National">National</Button>
-                    <Button style={styles.mainCatBtns} title="Both">Both</Button> */}
+                </View>
+                
+                {/* //sub-categories */}
+                <View style={{...styles.selections, flex:2}}>
+                    <View style={{width:400, alignItems:'center'}}><Text>Choose Sub-Categories</Text></View>
+                    <TouchableOpacity onPress={()=>this.handleOnSelectSubcategory('science')}>
+                        <Text style={[
+                            styles.selectionText,
+                            subCat.science ? styles.optionSelected : null
+                            ]}>Science</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={()=>this.handleOnSelectSubcategory('politics')}>
+                        <Text style={[
+                            styles.selectionText,
+                            subCat.politics ? styles.optionSelected : null
+                            ]}>Politics</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={()=>this.handleOnSelectSubcategory('sports')}>
+                        <Text style={[
+                            styles.selectionText,
+                            subCat.sports ? styles.optionSelected : null
+                            ]}>Sports</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={()=>this.handleOnSelectSubcategory('geography')}>
+                        <Text style={[
+                            styles.selectionText,
+                            subCat.geography ? styles.optionSelected : null
+                            ]}>Geography</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={()=>this.handleOnSelectSubcategory('history')}>
+                        <Text style={[
+                            styles.selectionText,
+                            subCat.history ? styles.optionSelected : null
+                            ]}>History</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={()=>this.handleOnSelectSubcategory('art')}>
+                        <Text style={[
+                            styles.selectionText,
+                            subCat.art ? styles.optionSelected : null
+                            ]}>Art & Culture</Text></TouchableOpacity>
                 </View>
                     
-                <View style={styles.qyestionTypes}>
+                <View style={styles.selections}>
                     <View style={{width:400, alignItems:'center'}}><Text>Question Types</Text></View>
                     <TouchableOpacity onPress={()=>this.handleOnPressLevel('easy')}>
                         <Text style={[
-                            styles.questionTypeText,
+                            styles.selectionText,
                             level.easy ? styles.optionSelected : null
                             ]}>Easy</Text></TouchableOpacity>
                     <TouchableOpacity onPress={()=>this.handleOnPressLevel('medium')}>
                         <Text style={[
-                            styles.questionTypeText,
+                            styles.selectionText,
                             level.medium ? styles.optionSelected : null
                             ]}>Medium</Text></TouchableOpacity>
                     <TouchableOpacity onPress={()=>this.handleOnPressLevel('hard')}>
                         <Text style={[
-                            styles.questionTypeText,
+                            styles.selectionText,
                             level.hard ? styles.optionSelected : null
                             ]}>Hard</Text></TouchableOpacity>
                 </View>
-                    <View style={styles.submit}><Button color='white' title="Submit" onPress={()=>navigate('Quiz')}/></View>
+                    <View style={styles.submit}><Button color='white' title="Submit" onPress={()=>navigate('QuizContainer')}/></View>
                
              </View>
         );
     }
 };
 
+const pickerStyles = StyleSheet.create({
+    // inputIOS: {
+        fontSize: 16,
+        paddingVertical: 12,
+        paddingHorizontal: 10,
+        borderWidth: 1,
+        borderRadius: 4,
+    
+        paddingRight: 30
+    // }
+})
+
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        // justifyContent:'flex-start',
         alignItems:'center',
-        // flexDirection:'row',
         flexWrap:'wrap',
         marginBottom:80
     },
@@ -198,18 +243,7 @@ const styles = StyleSheet.create({
         fontSize:18,
         textAlign:'center',
         color:'white',
-        // margin:5,
         padding:5
-    },
-    pickerSelect:{
-        // flex:1,
-        height: 100, 
-        fontSize:15,
-        width: 100, 
-        marginTop:30,
-        borderWidth:1,
-        borderColor:'blue'
-
     },
 
     questionQtyContainer:{
@@ -217,22 +251,20 @@ const styles = StyleSheet.create({
         alignItems:'center',
     },
 
-    category:{
-        flex:2,
-        alignItems:'center',
-        // marginBottom:30
-    },
+    // category:{
+    //     flex:2,
+    //     alignItems:'center',
+    // },
 
-    categoryText:{
-        // width:40,
-        padding:10,
-        margin:5,
-        borderWidth:1,
-        borderColor:'black'
+    // categoryText:{
+    //     padding:10,
+    //     margin:5,
+    //     borderWidth:1,
+    //     borderColor:'black'
 
-    },
+    // },
 
-    qyestionTypes:{
+    selections:{
         flex:1,
         flexDirection:'row',
         justifyContent:'center',
@@ -240,10 +272,9 @@ const styles = StyleSheet.create({
     
     },
 
-    questionTypeText:{
+    selectionText:{
         margin:20,
         padding:10,
-        // width:90,
         borderWidth:1,
         borderColor:'black',
         textAlign:'center'

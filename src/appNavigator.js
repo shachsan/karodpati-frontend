@@ -5,7 +5,7 @@ import QuizPrep from './components/QuizPrep';
 
 const MainNavigator = createStackNavigator({
   Home: {screen: HomeContainer},
-  Quiz: {screen: QuizContainer},
+  QuizContainer: {screen: QuizContainer},
   PrepareQuiz: {screen: QuizPrep},
 });
 
