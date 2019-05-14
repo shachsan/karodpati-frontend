@@ -5,9 +5,10 @@ export default class Question extends Component {
     render() {
         return (
             <>
-                <Text style={styles.question}>{this.props.quiz.question}</Text>
-
-                <Text style={styles.questionInNepali}>{this.props.quiz.questionInNep}</Text>
+                <View>
+                    <Text style={styles.question}>{this.props.quiz.question}</Text>
+                    <Text style={styles.questionInNepali}>{this.props.quiz.questionInNep}</Text>
+                </View>
 
                 <View>
                     {this.props.isAnswerCorrect === 'correct' ? <Text style={styles.correct}>Correct</Text> : null}

@@ -115,9 +115,14 @@ export default class Quiz extends Component{
         <>
            
           <View style={styles.quizContainer}>
-            <Question isAnswerCorrect={this.state.isAnswerCorrect}
-              quiz={this.props.quiz}
-            />
+            <View style={styles.quizCount}>
+              <Text style={{fontSize:15}}>{this.props.quizAttemping}/{this.props.numOfQuiz}</Text>
+            </View>
+            <View style={styles.question}>
+              <Question isAnswerCorrect={this.state.isAnswerCorrect}
+                quiz={this.props.quiz}
+              />
+            </View>
             
           </View>  
 
@@ -146,14 +151,26 @@ export default class Quiz extends Component{
 const styles = StyleSheet.create({
   quizContainer:{
     flex:2,
-    // alignItems:'stretch',
     backgroundColor:'blue',
-    // textAlign: 'center',
-    justifyContent:'space-between',
     flexWrap:'wrap',
     marginHorizontal: 10,
+    // flexDirection:'row',
+    // alignItems:'center',
+    justifyContent:'center',
     marginVertical:5
-},
+  },
+  question:{
+    alignSelf:'center',
+  },
+
+  quizCount:{
+    // width:1,
+    padding:5,
+    // fontSize:15,
+    alignItems:'flex-end',
+    // alignSelf:'flex-start',
+    backgroundColor:'yellow'
+  },
  
   optionsContainer:{
     flex:2,

@@ -1,9 +1,15 @@
 
 export default{
 
-   async getQuiz(){
+   async getQuiz(query){
         try {
-            let response = await fetch('http://localhost:3000/api/quiz');
+            let response = await fetch('http://localhost:3000/api/quiz',{
+                method:'POST',
+                headers:{
+                    'Content-Type': 'application/json'
+                },
+                body:JSON.stringify(query)
+            });
             let resJson = await response.json();
             return resJson;
         } catch (error) {

@@ -48,7 +48,7 @@ export default class App extends Component{
     const query = navigation.getParam('query', '');
     console.log('query props:',query );
     // const httpReq = new httpRequests();
-    const data = await httpRequests.getQuiz()
+    const data = await httpRequests.getQuiz(query)
     console.log('data:', data);
       this.setState({
           quiz:data
@@ -61,10 +61,14 @@ render() {
         <View style={styles.container}>
             {this.state.quiz.length > 0
             ? <>
+                
                 <LifeLine useFiftyFifty={this.fiftyFiftySelectHandler}></LifeLine>
                 <Quiz key={this.state.id} quiz={this.getQuiz()} 
                       nextQuiz={this.nextQuizHandler}
-                      fiftyFifty={this.state.fiftyFifty}/>
+                      fiftyFifty={this.state.fiftyFifty}
+                      numOfQuiz = {this.state.quiz.length}
+                      quizAttemping = {this.state.id}
+                />
               </>
             : null}
         </View>
