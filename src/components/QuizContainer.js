@@ -12,13 +12,6 @@ const App = props=>{
         title: 'Quiz',
       };
 
-  // state={
-  //   id:1,
-  //   quiz:[],
-  //   fiftyFifty:false,
-  //   quizPrepStarted:false,
-  //   quizReady:false
-  // }
   const [id, setId] = useState(1);
   const [quiz, setQuiz] = useState([]);
   const [fiftyFifty, setFiftyFifty] = useState(false)
@@ -29,36 +22,22 @@ const App = props=>{
     const {navigation} = props;
     const query = navigation.getParam('query', '');
     console.log('query props:',query );
-    // const httpReq = new httpRequests();
     const data = httpRequests.getQuiz(query)
     data.then(quizData => {
       setQuiz(quizData);
     })
     console.log('data:', data);
     console.log('quiz:', quiz);
-  },[])
-      
-
-  // quizPrepHandler=()=>{
-  //   setState({
-  //     quizPrepHandler:true
-  //   })
-  // }
+  },[]) //here empty array has been passed as second argument to useEffect. 
+  //if we pass any data inside this array and if that data changes, useEffect 
+  //will re-execute. By passing empty array, there will be no change ever inside 
+  //this array which will prevent useEffect to re-run often. 
 
   const fiftyFiftySelectHandler=()=>{
-    // setState({
-    //   fiftyFifty:true
-    // })
-    console.log('50 50 clicked');
-
     setFiftyFifty(true)
   }
 
   const nextQuizHandler=()=>{
-    // setState({
-    //   id:id+1,
-    //   fiftyFifty:false
-    // })
     setId(id+1);
     setFiftyFifty(false);
   }
@@ -66,33 +45,6 @@ const App = props=>{
   const getQuiz=()=>{
     return quiz[id-1];
   }
-
-  // async componentDidMount(){
-  //   const {navigation} = props;
-  //   const query = navigation.getParam('query', '');
-  //   console.log('query props:',query );
-  //   // const httpReq = new httpRequests();
-  //   const data = await httpRequests.getQuiz(query)
-  //   console.log('data:', data);
-  //     setState({
-  //         quiz:data
-  //       })
-  // }
-
-  // async componentDidMount(){
-  //   const {navigation} = props;
-  //   const query = navigation.getParam('query', '');
-  //   console.log('query props:',query );
-  //   // const httpReq = new httpRequests();
-  //   const data = await httpRequests.getQuiz(query)
-  //   console.log('data:', data);
-  //     setState({
-  //         quiz:data
-  //       })
-  // }
-
-
-
 
     return (
         <View style={styles.container}>
