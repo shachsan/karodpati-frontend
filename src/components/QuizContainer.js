@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {useState, useEffect} from 'react';
 import LifeLine from './lifeLine';
 import Quiz from './Quiz';
 // import HomeContainer from './src/components/HomeContainer';
@@ -6,75 +6,114 @@ import Quiz from './Quiz';
 import httpRequests from '../httpRequests';
 import {View, Text, StyleSheet} from 'react-native';
 
-export default class App extends Component{
+const App = props=>{
 
-    static navigationOptions = {
+    navigationOptions = {
         title: 'Quiz',
       };
 
-  state={
-    id:1,
-    quiz:[],
-    fiftyFifty:false,
-    quizPrepStarted:false,
-    quizReady:false
-  }
+  // state={
+  //   id:1,
+  //   quiz:[],
+  //   fiftyFifty:false,
+  //   quizPrepStarted:false,
+  //   quizReady:false
+  // }
+  const [id, setId] = useState(1);
+  const [quiz, setQuiz] = useState([]);
+  const [fiftyFifty, setFiftyFifty] = useState(false)
+  const [quiPrepStarted, setQuiPrepStarted] = useState(false)
+  const [quizReady, setQuizReady] = useState(false)
 
-  quizPrepHandler=()=>{
-    this.setState({
-      quizPrepHandler:true
-    })
-  }
-
-  fiftyFiftySelectHandler=()=>{
-    this.setState({
-      fiftyFifty:true
-    })
-  }
-
-  nextQuizHandler=()=>{
-    this.setState({
-      id:this.state.id+1,
-      fiftyFifty:false
-    })
-  }
-
-  getQuiz=()=>{
-    return this.state.quiz[this.state.id-1];
-  }
-
-  async componentDidMount(){
-    const {navigation} = this.props;
+  useEffect(()=>{
+    const {navigation} = props;
     const query = navigation.getParam('query', '');
     console.log('query props:',query );
     // const httpReq = new httpRequests();
-    const data = await httpRequests.getQuiz(query)
+    const data = httpRequests.getQuiz(query)
+    data.then(quizData => {
+      setQuiz(quizData);
+    })
     console.log('data:', data);
-      this.setState({
-          quiz:data
-        })
+    console.log('quiz:', quiz);
+  },[])
+      
+
+  // quizPrepHandler=()=>{
+  //   setState({
+  //     quizPrepHandler:true
+  //   })
+  // }
+
+  const fiftyFiftySelectHandler=()=>{
+    // setState({
+    //   fiftyFifty:true
+    // })
+    console.log('50 50 clicked');
+
+    setFiftyFifty(true)
   }
 
+  const nextQuizHandler=()=>{
+    // setState({
+    //   id:id+1,
+    //   fiftyFifty:false
+    // })
+    setId(id+1);
+    setFiftyFifty(false);
+  }
 
-render() {
+  const getQuiz=()=>{
+    return quiz[id-1];
+  }
+
+  // async componentDidMount(){
+  //   const {navigation} = props;
+  //   const query = navigation.getParam('query', '');
+  //   console.log('query props:',query );
+  //   // const httpReq = new httpRequests();
+  //   const data = await httpRequests.getQuiz(query)
+  //   console.log('data:', data);
+  //     setState({
+  //         quiz:data
+  //       })
+  // }
+
+  // async componentDidMount(){
+  //   const {navigation} = props;
+  //   const query = navigation.getParam('query', '');
+  //   console.log('query props:',query );
+  //   // const httpReq = new httpRequests();
+  //   const data = await httpRequests.getQuiz(query)
+  //   console.log('data:', data);
+  //     setState({
+  //         quiz:data
+  //       })
+  // }
+
+
+
+
     return (
         <View style={styles.container}>
-            {this.state.quiz.length > 0
+            {quiz.length > 0
             ? <>
                 
-                <LifeLine useFiftyFifty={this.fiftyFiftySelectHandler}></LifeLine>
-                <Quiz key={this.state.id} quiz={this.getQuiz()} 
-                      nextQuiz={this.nextQuizHandler}
-                      fiftyFifty={this.state.fiftyFifty}
-                      numOfQuiz = {this.state.quiz.length}
-                      quizAttemping = {this.state.id}
+                <LifeLine useFiftyFifty={fiftyFiftySelectHandler}></LifeLine>
+                <Quiz key={id} quiz={getQuiz()} 
+                      nextQuiz={nextQuizHandler}
+                      fiftyFifty={fiftyFifty}
+                      numOfQuiz = {quiz.length}
+                      quizAttemping = {id}
                 />
               </>
             : null}
         </View>
     );
-    }
+  
 }
+
+export default App;
 
 
 
