@@ -119,7 +119,10 @@ const Quiz=props=>{
       setOptionsToRender([...optionsToRender,secondNum])
 
     }
-  },[props.fiftyFifty])
+  },[props.fiftyFifty]) //here props.fiftyFifty is passed as 2nd argument to
+  //useEffect hook. Passing the argument here will make the useEffect hook 
+  //work like componentDidUpdate life cycle hook. This argument tells this hook
+  //that if there is a change in props.fiftyFifty, re-render this Quiz component
     return (
         <>
            
