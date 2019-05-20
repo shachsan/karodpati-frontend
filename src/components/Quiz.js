@@ -6,7 +6,7 @@
  * @flow
  */
 
-import React, {Component} from 'react';
+import React, {useState, useEffect} from 'react';
 import Option from './Option';
 import Question from './question';
 import {
@@ -16,127 +16,136 @@ import {
   from 'react-native';
 
 
-export default class Quiz extends Component{
+const Quiz=props=>{
 
-    state={
-        optionSelected:null,
-        isAnswerCorrect:null,
-        answerSubmitted:false,
-        toggleSubmitBtn:false,
-        optionsToRender:[+this.props.quiz.answer]
-    }   
+    // state={
+    //     optionSelected:null,
+    //     isAnswerCorrect:null,
+    //     answerSubmitted:false,
+    //     toggleSubmitBtn:false,
+    //     optionsToRender:[+props.quiz.answer]
+    // }   
     
-    isAnswerSubmitted=()=>{
-        return this.state.answerSubmitted;
+    const [optionSelected, setOptionSelected] = useState(null);
+    const [isAnswerCorrect, setIsAnswerCorrect] = useState(null);
+    const [answerSubmitted, setAnswerSubmitted] = useState(false);
+    const [toggleSubmitBtn, setToggleSubmitBtn] = useState(false);
+    const [optionsToRender, setOptionsToRender] = useState([+props.quiz.answer]);
+    
+    console.log("optionsToRender:", optionsToRender);
+    
+    const isAnswerSubmitted=()=>{
+        return answerSubmitted;
     }
 
-    isCorrectAnswer=(optionIdx)=>{
-        return +this.props.quiz.answer===optionIdx;
+    const isCorrectAnswer=(optionIdx)=>{
+        return +props.quiz.answer===optionIdx;
     }
 
-    optionSelectHandler=(optionId)=>{
-        this.setState({
-            optionSelected:optionId,
-            toggleSubmitBtn:true,
-        })
-
+    const optionSelectHandler=(optionId)=>{
+        // setState({
+        //     optionSelected:optionId,
+        //     toggleSubmitBtn:true,
+        // })
+      setOptionSelected(optionId);
+      setToggleSubmitBtn(true)
     }
 
-    isSelected=(optionIndex)=>{
-        return this.state.optionSelected===optionIndex;
+    const isSelected=(optionIndex)=>{
+        return optionSelected===optionIndex;
     }
 
-    checkAnswer=()=>{
-        if(this.state.optionSelected===+this.props.quiz.answer){
-            this.setState({
-                isAnswerCorrect:'correct',
-                answerSubmitted:true,
-                toggleSubmitBtn:false
-            })
+    const checkAnswer=()=>{
+        if(optionSelected===+props.quiz.answer){
+            setIsAnswerCorrect('correct');
+            setAnswerSubmitted(true);
+            setToggleSubmitBtn(false);
         }else{
-            this.setState({
-                isAnswerCorrect:'incorrect',
-                answerSubmitted:true,
-                toggleSubmitBtn:false
-            })
+            setIsAnswerCorrect('incorrect');
+            setAnswerSubmitted(true);
+            setToggleSubmitBtn(false);
         }
     }
 
 
-  renderOptions=()=>{
+  const renderOptions=()=>{
 
       //TODO: randomly arrange Options in an array
       
       const options=[];
       // const shuffledOptions=[];
-      // let numOfOption = this.props.fiftyFifty ? 2 : 4;
+      // let numOfOption = props.fiftyFifty ? 2 : 4;
       for(let i=0;i<4;i++){
         // let idx = Math.floor(Math.random()*(4-i));
           // options.splice(idx, 0, <Option 
           options.push(<Option 
             key={i+1} 
-            option={this.props.quiz.options[i+1]} 
-            isSelected={this.isSelected(i+1)}
-            isAnswerSubmitted={this.isAnswerSubmitted()}
-            isCorrectAnswer={this.isCorrectAnswer(i+1)}
+            option={props.quiz.options[i+1]} 
+            isSelected={isSelected(i+1)}
+            isAnswerSubmitted={isAnswerSubmitted()}
+            isCorrectAnswer={isCorrectAnswer(i+1)}
             optionId={i+1}
-            fiftyFifty={this.props.fiftyFifty}
-            optionsToRender={this.state.optionsToRender}
-            optionSelectHandler={this.optionSelectHandler}/>)
+            fiftyFifty={props.fiftyFifty}
+            fiftyFiftyOptions={optionsToRender}
+            optionSelectHandler={optionSelectHandler}/>)
       }
 
       return options;
   }
 
-  getRandomIdx=()=>{
+  const getRandomIdx=()=>{
     return Math.ceil(Math.random()*4);
   }
 
-  componentDidMount(){
-    console.log('quiz', this.props.quiz);
-  }
+  // componentDidMount(){
+  //   console.log('quiz', props.quiz);
+  // }
 
   
-  render() {
-    console.log('optionsToBeRendered:', this.state.optionsToRender);
-    if(this.props.fiftyFifty && this.state.optionsToRender.length<2){
-      // let optionsToRender=[+this.props.quiz.answer];
-      let secondNum = this.getRandomIdx();
-      console.log('answer id:', this.props.quiz.answer);
-      while(secondNum===+this.props.quiz.answer){
-        secondNum=this.getRandomIdx();
+  useEffect(()=> {
+    // console.log('optionsToBeRendered:', optionsToRender);
+    if(props.fiftyFifty && optionsToRender.length<2){
+      // let optionsToRender=[+props.quiz.answer];
+      let secondNum = getRandomIdx();
+      console.log('answer id:', props.quiz.answer);
+      while(secondNum===+props.quiz.answer){
+        secondNum=getRandomIdx();
         console.log('inside while loop, secondNum:',secondNum);
       }
-      this.setState({
-        optionsToRender:[...this.state.optionsToRender,secondNum]
-      })
+      // setState({
+      //   optionsToRender:[...optionsToRender,secondNum]
+      // })
+      console.log("optionsToRender:", [...optionsToRender,secondNum]);
+      setOptionsToRender([...optionsToRender,secondNum])
+
     }
+  },[props.fiftyFifty])
     return (
         <>
            
           <View style={styles.quizContainer}>
             <View style={styles.quizCount}>
-              <Text style={{fontSize:15}}>{this.props.quizAttemping}/{this.props.numOfQuiz}</Text>
+              <Text style={{fontSize:15}}>{props.quizAttemping}/{props.numOfQuiz}</Text>
             </View>
             <View style={styles.question}>
-              <Question isAnswerCorrect={this.state.isAnswerCorrect}
-                quiz={this.props.quiz}
+              <Question isAnswerCorrect={isAnswerCorrect}
+                quiz={props.quiz}
               />
             </View>
             
           </View>  
 
           <View style={styles.optionsContainer}>
-            {this.renderOptions()}
-            {this.state.toggleSubmitBtn ?
-            <TouchableOpacity onPress={this.checkAnswer}>
+            {renderOptions()}
+            {toggleSubmitBtn ?
+            <TouchableOpacity onPress={checkAnswer}>
                 <View style={styles.button}>
                     <Text style={styles.buttonText}>Submit Answer</Text>
                 </View>
             </TouchableOpacity> : null}
 
-            {this.state.answerSubmitted ?
-            <TouchableOpacity onPress={this.props.nextQuiz}>
+            {answerSubmitted ?
+            <TouchableOpacity onPress={props.nextQuiz}>
                 <View style={styles.button}>
                     <Text style={styles.buttonText}>Next Question</Text>
                 </View>
@@ -145,8 +154,10 @@ export default class Quiz extends Component{
 
       </>
     );
-  }
+
 }
+
+export default Quiz;
 
 const styles = StyleSheet.create({
   quizContainer:{

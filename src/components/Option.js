@@ -22,7 +22,7 @@ export default class Option extends Component {
                     this.props.isSelected && styles.selectedOption,
                     this.props.isAnswerSubmitted && this.props.isCorrectAnswer && styles.correctAnswer]}>
                     {this.props.fiftyFifty 
-                        ? this.props.optionsToRender.includes(this.props.optionId) 
+                        ? this.props.fiftyFiftyOptions.includes(this.props.optionId) 
                             ? this.props.option
                             : null
                         : this.props.option}</Text>

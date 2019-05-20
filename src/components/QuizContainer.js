@@ -15,7 +15,7 @@ const App = props=>{
   const [id, setId] = useState(1);
   const [quiz, setQuiz] = useState([]);
   const [fiftyFifty, setFiftyFifty] = useState(false)
-  const [quiPrepStarted, setQuiPrepStarted] = useState(false)
+  const [quizPrepStarted, setQuizPrepStarted] = useState(false)
   const [quizReady, setQuizReady] = useState(false)
 
   useEffect(()=>{
