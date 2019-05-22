@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {StyleSheet,Text, TouchableOpacity} from 'react-native';
+import {StyleSheet,Text, View, TouchableOpacity} from 'react-native';
 
 export default class Option extends Component {
 
@@ -18,14 +18,18 @@ export default class Option extends Component {
         return (
             <TouchableOpacity disabled={this.props.isAnswerSubmitted} 
                     onPress={()=>this.props.optionSelectHandler(this.props.optionId)}>
-                <Text style={[styles.options, 
-                    this.props.isSelected && styles.selectedOption,
-                    this.props.isAnswerSubmitted && this.props.isCorrectAnswer && styles.correctAnswer]}>
-                    {this.props.fiftyFifty 
-                        ? this.props.fiftyFiftyOptions.includes(this.props.optionId) 
-                            ? this.props.option
-                            : null
-                        : this.props.option}</Text>
+                <View style={[styles.options, 
+                        this.props.isSelected && styles.selectedOption,
+                        this.props.isAnswerSubmitted && this.props.isCorrectAnswer && styles.correctAnswer]}>
+                    <Text style={styles.optionText}>
+                        {this.props.fiftyFifty 
+                            ? this.props.fiftyFiftyOptions.includes(this.props.optionId) 
+                                ? this.props.option
+                                : null
+                            : this.props.option}
+                    </Text>
+
+                </View>
             </TouchableOpacity>
         );
     }
@@ -33,14 +37,22 @@ export default class Option extends Component {
 
 const styles = StyleSheet.create({
     options:{
+        display:'flex',
         width:130,
-        height:45,
+        height:70,
         marginVertical:30,
         marginHorizontal:10,
+        padding:10,
+        justifyContent:'center',
+
+        // verticalAlign:'middle',
+        backgroundColor:'yellow',
+    },
+    optionText:{
         fontSize:20,
         textAlign:'center',
-        backgroundColor:'yellow',
-      },
+
+    },
     selectedOption:{
         backgroundColor:'orange',
         color:'blue'
