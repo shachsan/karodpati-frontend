@@ -17,15 +17,7 @@ import {
 
 
 const Quiz=props=>{
-
-    // state={
-    //     optionSelected:null,
-    //     isAnswerCorrect:null,
-    //     answerSubmitted:false,
-    //     toggleSubmitBtn:false,
-    //     optionsToRender:[+props.quiz.answer]
-    // }   
-    
+  
     const [optionSelected, setOptionSelected] = useState(null);
     const [isAnswerCorrect, setIsAnswerCorrect] = useState(null);
     const [answerSubmitted, setAnswerSubmitted] = useState(false);
@@ -43,10 +35,6 @@ const Quiz=props=>{
     }
 
     const optionSelectHandler=(optionId)=>{
-        // setState({
-        //     optionSelected:optionId,
-        //     toggleSubmitBtn:true,
-        // })
       setOptionSelected(optionId);
       setToggleSubmitBtn(true)
     }
@@ -73,11 +61,7 @@ const Quiz=props=>{
       //TODO: randomly arrange Options in an array
       
       const options=[];
-      // const shuffledOptions=[];
-      // let numOfOption = props.fiftyFifty ? 2 : 4;
       for(let i=0;i<4;i++){
-        // let idx = Math.floor(Math.random()*(4-i));
-          // options.splice(idx, 0, <Option 
           options.push(<Option 
             key={i+1} 
             option={props.quiz.options[i+1]} 
@@ -97,32 +81,20 @@ const Quiz=props=>{
     return Math.ceil(Math.random()*4);
   }
 
-  // componentDidMount(){
-  //   console.log('quiz', props.quiz);
-  // }
-
   
   useEffect(()=> {
-    // console.log('optionsToBeRendered:', optionsToRender);
     if(props.fiftyFifty && optionsToRender.length<2){
-      // let optionsToRender=[+props.quiz.answer];
       let secondNum = getRandomIdx();
-      console.log('answer id:', props.quiz.answer);
       while(secondNum===+props.quiz.answer){
         secondNum=getRandomIdx();
-        console.log('inside while loop, secondNum:',secondNum);
       }
-      // setState({
-      //   optionsToRender:[...optionsToRender,secondNum]
-      // })
-      console.log("optionsToRender:", [...optionsToRender,secondNum]);
       setOptionsToRender([...optionsToRender,secondNum])
 
     }
   },[props.fiftyFifty]) //here props.fiftyFifty is passed as 2nd argument to
   //useEffect hook. Passing the argument here will make the useEffect hook 
   //work like componentDidUpdate life cycle hook. This argument tells this hook
-  //that if there is a change in props.fiftyFifty, re-render this Quiz component
+  //that if there is a change in props.fiftyFifty, re-run the effect
     return (
         <>
            
@@ -168,8 +140,6 @@ const styles = StyleSheet.create({
     backgroundColor:'blue',
     flexWrap:'wrap',
     marginHorizontal: 10,
-    // flexDirection:'row',
-    // alignItems:'center',
     justifyContent:'center',
     marginVertical:5
   },
@@ -178,11 +148,8 @@ const styles = StyleSheet.create({
   },
 
   quizCount:{
-    // width:1,
     padding:5,
-    // fontSize:15,
     alignItems:'flex-end',
-    // alignSelf:'flex-start',
     backgroundColor:'yellow'
   },
  
@@ -201,7 +168,6 @@ const styles = StyleSheet.create({
     width:180,
     backgroundColor:'blue',
     alignItems:'center',
-    // justifyContent:'center',
   },
   buttonText:{
     padding:5,
