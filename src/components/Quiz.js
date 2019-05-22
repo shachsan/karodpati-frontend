@@ -102,10 +102,16 @@ const Quiz=props=>{
             <View style={styles.quizCount}>
               <Text style={{fontSize:15}}>{props.quizAttemping}/{props.numOfQuiz}</Text>
             </View>
+
             <View style={styles.question}>
-              <Question isAnswerCorrect={isAnswerCorrect}
+              <Question
                 quiz={props.quiz}
               />
+            </View>
+
+            <View>
+                    {isAnswerCorrect === 'correct' ? <Text style={[styles.correct, styles.answerStatus]}>Correct</Text> : null}
+                    {isAnswerCorrect === 'incorrect' ? <Text style={[styles.inCorrect, styles.answerStatus]}>Incorrect</Text>:null}
             </View>
             
           </View>  
@@ -136,25 +142,23 @@ export default Quiz;
 
 const styles = StyleSheet.create({
   quizContainer:{
-    flex:2,
+    flex:1,
     backgroundColor:'blue',
     flexWrap:'wrap',
     marginHorizontal: 10,
-    justifyContent:'center',
+    justifyContent:'space-between',
     marginVertical:5
   },
-  question:{
-    alignSelf:'center',
-  },
+
 
   quizCount:{
     padding:5,
-    alignItems:'flex-end',
-    backgroundColor:'yellow'
+    backgroundColor:'yellow',
+    alignSelf:'flex-end'
   },
  
   optionsContainer:{
-    flex:2,
+    flex:1,
     flexDirection:'row',
     flexWrap:'wrap',
     justifyContent:'space-around',
@@ -172,6 +176,19 @@ const styles = StyleSheet.create({
   buttonText:{
     padding:5,
     color:'white'
-  }
+  },
+
+  answerStatus:{
+    color:'white',
+    fontSize:25,
+    textAlign:'center',
+  },
+  correct:{
+    backgroundColor:'green',
+  },
+
+  inCorrect:{
+    backgroundColor:'red',
+  },
 
 });
