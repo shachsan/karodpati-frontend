@@ -44,14 +44,14 @@ const Quiz=props=>{
     }
 
     const checkAnswer=()=>{
+      setAnswerSubmitted(true);
+      setToggleSubmitBtn(false);
         if(optionSelected===+props.quiz.answer){
             setIsAnswerCorrect('correct');
-            setAnswerSubmitted(true);
-            setToggleSubmitBtn(false);
+            props.scoreHandler(true);
         }else{
             setIsAnswerCorrect('incorrect');
-            setAnswerSubmitted(true);
-            setToggleSubmitBtn(false);
+            props.scoreHandler(false);
         }
     }
 
@@ -99,9 +99,7 @@ const Quiz=props=>{
         <>
            
           <View style={styles.quizContainer}>
-            <View style={styles.quizCount}>
-              <Text style={{fontSize:15}}>{props.quizAttemping}/{props.numOfQuiz}</Text>
-            </View>
+            
 
             <View style={styles.question}>
               <Question
@@ -149,7 +147,6 @@ const styles = StyleSheet.create({
     justifyContent:'space-between',
     marginVertical:5
   },
-
 
   quizCount:{
     padding:5,

@@ -17,6 +17,8 @@ const App = props=>{
   const [fiftyFifty, setFiftyFifty] = useState(false)
   const [quizPrepStarted, setQuizPrepStarted] = useState(false)
   const [quizReady, setQuizReady] = useState(false)
+  const [correctAnswerCounter, setCorrectAnswerCounter] = useState(0);
+  const [wrongAnswerCounter, setWrongAnswerCounter] = useState(0);
 
   useEffect(()=>{
     const {navigation} = props;
@@ -46,17 +48,28 @@ const App = props=>{
     return quiz[id-1];
   }
 
+  const scoreHandler = (answer)=>{
+    answer ? setCorrectAnswerCounter(correctAnswerCounter+1) : setWrongAnswerCounter(wrongAnswerCounter+1);
+  }
+
     return (
         <View style={styles.container}>
             {quiz.length > 0
             ? <>
                 
                 <LifeLine useFiftyFifty={fiftyFiftySelectHandler}></LifeLine>
+                <View style={styles.statusBar}>
+                  <Text>correct ans:{correctAnswerCounter}</Text>
+                  <Text>Incorrect ans:{wrongAnswerCounter}</Text>
+                  <Text style={{fontSize:15}}>Ques:{props.quizAttemping}/{props.numOfQuiz}</Text>
+                </View>
                 <Quiz key={id} quiz={getQuiz()} 
                       nextQuiz={nextQuizHandler}
                       fiftyFifty={fiftyFifty}
                       numOfQuiz = {quiz.length}
                       quizAttemping = {id}
+                      scoreHandler={scoreHandler}
+                      // setWrongAnswerCounter={setWrongAnswerCounter}
                 />
               </>
             : null}
@@ -75,5 +88,11 @@ export default App;
       // marginTop:40,
       marginBottom:30,
       backgroundColor: '#F5FCFF',
-    }
+    },
+    statusBar:{
+      display:'flex',
+      flexDirection:'row',
+      justifyContent:'space-between',
+      backgroundColor:'yellow'
+    },
   })
