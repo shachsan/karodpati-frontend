@@ -140,14 +140,6 @@ export default class QuizPrep extends Component {
                             categories.includes("national") ? styles.optionSelected : null
                             ]}>National</Text>
                     </TouchableOpacity>
-                    {/* <TouchableOpacity onPress={()=>this.handleCategoryOnPress("any")}>
-                        <Text style={[
-                            styles.selectionText,
-                            // categories.international && categories.national ? styles.optionSelected : null
-                            categories.includes("international" && "national") ? styles.optionSelected : null
-                            ]}>Any</Text>
-                        {/* <Text style={styles.selectionText}>Any</Text> 
-                    </TouchableOpacity> */}
                 </View>
                 
                 {/* //sub-categories */}

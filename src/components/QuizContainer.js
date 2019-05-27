@@ -61,13 +61,13 @@ const App = props=>{
                 <View style={styles.statusBar}>
                   <Text>correct ans:{correctAnswerCounter}</Text>
                   <Text>Incorrect ans:{wrongAnswerCounter}</Text>
-                  <Text style={{fontSize:15}}>Ques:{props.quizAttemping}/{props.numOfQuiz}</Text>
+                  <Text style={{fontSize:15}}>Ques:{id}/{quiz.length}</Text>
                 </View>
                 <Quiz key={id} quiz={getQuiz()} 
                       nextQuiz={nextQuizHandler}
                       fiftyFifty={fiftyFifty}
-                      numOfQuiz = {quiz.length}
-                      quizAttemping = {id}
+                      // numOfQuiz = {quiz.length}
+                      // quizAttemping = {id}
                       scoreHandler={scoreHandler}
                       // setWrongAnswerCounter={setWrongAnswerCounter}
                 />
@@ -93,6 +93,7 @@ export default App;
       display:'flex',
       flexDirection:'row',
       justifyContent:'space-between',
-      backgroundColor:'yellow'
+      backgroundColor:'yellow',
+      marginHorizontal:10
     },
   })
