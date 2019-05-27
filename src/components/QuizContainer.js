@@ -1,16 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import LifeLine from './lifeLine';
 import Quiz from './Quiz';
-// import HomeContainer from './src/components/HomeContainer';
-// import AppNavigator from './src/appNavigator';
 import httpRequests from '../httpRequests';
 import {View, Text, StyleSheet} from 'react-native';
 
-const App = props=>{
-
-    navigationOptions = {
-        title: 'Quiz',
-      };
+const QuizContainer = props=>{
 
   const [id, setId] = useState(1);
   const [quiz, setQuiz] = useState([]);
@@ -66,10 +60,7 @@ const App = props=>{
                 <Quiz key={id} quiz={getQuiz()} 
                       nextQuiz={nextQuizHandler}
                       fiftyFifty={fiftyFifty}
-                      // numOfQuiz = {quiz.length}
-                      // quizAttemping = {id}
                       scoreHandler={scoreHandler}
-                      // setWrongAnswerCounter={setWrongAnswerCounter}
                 />
               </>
             : null}
@@ -78,14 +69,13 @@ const App = props=>{
   
 }
 
-export default App;
+export default QuizContainer;
 
 
 
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      // marginTop:40,
       marginBottom:30,
       backgroundColor: '#F5FCFF',
     },

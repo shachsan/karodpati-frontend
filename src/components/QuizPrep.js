@@ -47,36 +47,32 @@ export default class QuizPrep extends Component {
                 }else{
                     prevState.form.categories.push(cat);
                 }
-
-                // prevState.form.categories[cat]=!prevState.form.categories[cat];
-                // prevState.form.categories.any = prevState.form.categories.international && prevState.form.categories.national 
-                // ? true : false;
                 return prevState;
             }
         )
     }
 
     handleOnPressLevel=(level)=>{
-        this.setState(state=>{
+        this.setState(prevState=>{
             let levelPressed = state.form.level.findIndex(l=>l===level) //returns index of matched element
             if(levelPressed>=0){
-                state.form.level.splice(levelPressed,1);
+                preState.form.level.splice(levelPressed,1);
             }else{
-                state.form.level.push(level);
+                preState.form.level.push(level);
             }
-            return state;
+            return preState;
         })
     }
     handleOnSelectSubcategory=(subCategory)=>{
-        this.setState(state=>{
+        this.setState(prevState=>{
             let subCatSelected = state.form.subCat.findIndex(subcat=>subcat===subCategory)
             if(subCatSelected>=0){
-                state.form.subCat.splice(subCatSelected,1);
+                preState.form.subCat.splice(subCatSelected,1);
             }else{
-                state.form.subCat.push(subCategory);
+                preState.form.subCat.push(subCategory);
             }
 
-            return state;
+            return preState;
         })
     }
 
@@ -243,19 +239,6 @@ const styles = StyleSheet.create({
         flex:1,
         alignItems:'center',
     },
-
-    // category:{
-    //     flex:2,
-    //     alignItems:'center',
-    // },
-
-    // categoryText:{
-    //     padding:10,
-    //     margin:5,
-    //     borderWidth:1,
-    //     borderColor:'black'
-
-    // },
 
     selections:{
         flex:1,
