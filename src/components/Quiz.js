@@ -115,18 +115,29 @@ const Quiz=props=>{
           <View style={styles.optionsContainer}>
             {renderOptions()}
             {toggleSubmitBtn ?
-            <TouchableOpacity onPress={checkAnswer}>
+            <TouchableOpacity onPress={()=>{checkAnswer();props.checkIfLastQuiz()}}>
                 <View style={styles.button}>
                     <Text style={styles.buttonText}>Submit Answer</Text>
                 </View>
             </TouchableOpacity> : null}
 
-            {answerSubmitted ?
+            {answerSubmitted && !props.lastQuestion ?
             <TouchableOpacity onPress={props.nextQuiz}>
                 <View style={styles.button}>
-                    <Text style={styles.buttonText}>Next Question</Text>
+                  <Text style={styles.buttonText}>Next Question</Text>
                 </View>
             </TouchableOpacity> : null}
+
+            {answerSubmitted && props.lastQuestion ?
+            <TouchableOpacity onPress={props.displayReport}>
+                <View style={{alignItems:'center'}}>
+                  <Text style={styles.buttonText}>End of Quiz!</Text>
+                </View>
+                <View style={styles.button}>
+                  <Text style={styles.buttonText}>Show Report</Text>
+                </View>
+            </TouchableOpacity> : null}
+                    
         </View>
 
       </>
@@ -146,11 +157,11 @@ const styles = StyleSheet.create({
     marginVertical:5
   },
 
-  quizCount:{
-    padding:5,
-    backgroundColor:'yellow',
-    alignSelf:'flex-end'
-  },
+  // quizCount:{
+  //   padding:5,
+  //   backgroundColor:'yellow',
+  //   alignSelf:'flex-end'
+  // },
  
   optionsContainer:{
     flex:1,

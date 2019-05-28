@@ -2,15 +2,18 @@ import React from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 
 const QuizEndReport = props =>{
+    const accuracyData = props.navigation.state.params;//navigation.state.params stores
+        //object passed as second argument to navigate methode. Ref: QuizContainer/navigate('QuizEndReport') 
+    console.log('End of quiz report:', accuracyData);
     return (
         <View style={styles.container}>
                 <Text>
-                    This is the end of Questions
+                    Report
                 </Text>
             <View style={styles.circle}>
                 <Text style={[styles.accuracy, {fontSize:20}]}>Accuracy</Text>
                 <Text style={styles.accuracy}>
-                    {(props.noOfCorrectAns/props.totalQuestions)*100}%
+                    {(accuracyData.noOfCorrectAns/accuracyData.totalQuestions)*100}%
                 </Text>
             </View>
         </View>

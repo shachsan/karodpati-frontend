@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
         display:'flex',
         width:130,
         height:70,
-        marginVertical:30,
+        marginVertical:20,
         marginHorizontal:10,
         padding:10,
         justifyContent:'center',

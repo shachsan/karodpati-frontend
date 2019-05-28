@@ -6,10 +6,13 @@ import {View, Text, StyleSheet} from 'react-native';
 import QuizEndReport from './QuizEndReport';
 
 const QuizContainer = props=>{
+  const {navigation} = props;
+  const {navigate} = navigation;
 
   const [id, setId] = useState(1);
   const [quiz, setQuiz] = useState([]);
   const [endOfQuestion, setEndOfQuestion] = useState(false);
+  const [showReport, setShowReport] = useState(false);
   const [fiftyFifty, setFiftyFifty] = useState(false);
   const [quizPrepStarted, setQuizPrepStarted] = useState(false);
   const [quizReady, setQuizReady] = useState(false);
@@ -17,7 +20,6 @@ const QuizContainer = props=>{
   const [wrongAnswerCounter, setWrongAnswerCounter] = useState(0);
 
   useEffect(()=>{
-    const {navigation} = props;
     const query = navigation.getParam('query', '');
     console.log('query props:',query );
     const data = httpRequests.getQuiz(query)
@@ -35,14 +37,26 @@ const QuizContainer = props=>{
     setFiftyFifty(true)
   }
 
-  const nextQuizHandler=()=>{
-    console.log('id:',id,'   quiz.length:', quiz.length );
+  const checkIfLastQuiz =()=>{
     if(id===quiz.length){
       setEndOfQuestion(true);
-    }else{
-      setId(id+1);
-      setFiftyFifty(false);
     }
+  }
+
+  const displayReport=()=>{
+    setShowReport(true);
+  }
+
+  const nextQuizHandler=()=>{
+    console.log('id:',id,'   quiz.length:', quiz.length );
+    // if(id===quiz.length){
+    //   setEndOfQuestion(true);
+    // }else{
+      if(!endOfQuestion){
+        setId(id+1);
+        setFiftyFifty(false);
+      }
+    
   }
 
   const getQuiz=()=>{
@@ -57,7 +71,7 @@ const QuizContainer = props=>{
         <View style={styles.container}>
             {quiz.length > 0
             ? <>
-              {!endOfQuestion ?
+              {!showReport ?
                 <>
                   <LifeLine useFiftyFifty={fiftyFiftySelectHandler}></LifeLine>
                   <View style={styles.statusBar}>
@@ -67,15 +81,23 @@ const QuizContainer = props=>{
                   </View>
                   <Quiz key={id} quiz={getQuiz()} 
                         nextQuiz={nextQuizHandler}
+                        checkIfLastQuiz={checkIfLastQuiz}
+                        displayReport={displayReport}
+                        lastQuestion={endOfQuestion}
                         fiftyFifty={fiftyFifty}
                         scoreHandler={scoreHandler}
                   />
                 </>
-                : <QuizEndReport 
-                      noOfCorrectAns={correctAnswerCounter}
-                      noOfWrongAns={wrongAnswerCounter}
-                      totalQuestions={quiz.length}
-                  />
+                : navigate('QuizEndReport',{
+                    noOfCorrectAns:correctAnswerCounter,
+                    noOfWrongAns:wrongAnswerCounter,
+                    totalQuestions:quiz.length
+                  })
+                // <QuizEndReport 
+                //       noOfCorrectAns={correctAnswerCounter}
+                //       noOfWrongAns={wrongAnswerCounter}
+                //       totalQuestions={quiz.length}
+                //   />
               }</>
             : null}
         </View>
