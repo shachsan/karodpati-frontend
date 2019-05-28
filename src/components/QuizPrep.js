@@ -54,25 +54,25 @@ export default class QuizPrep extends Component {
 
     handleOnPressLevel=(level)=>{
         this.setState(prevState=>{
-            let levelPressed = state.form.level.findIndex(l=>l===level) //returns index of matched element
+            let levelPressed = prevState.form.level.findIndex(l=>l===level) //returns index of matched element
             if(levelPressed>=0){
-                preState.form.level.splice(levelPressed,1);
+                prevState.form.level.splice(levelPressed,1);
             }else{
-                preState.form.level.push(level);
+                prevState.form.level.push(level);
             }
-            return preState;
+            return prevState;
         })
     }
     handleOnSelectSubcategory=(subCategory)=>{
         this.setState(prevState=>{
-            let subCatSelected = state.form.subCat.findIndex(subcat=>subcat===subCategory)
+            let subCatSelected = prevState.form.subCat.findIndex(subcat=>subcat===subCategory)
             if(subCatSelected>=0){
-                preState.form.subCat.splice(subCatSelected,1);
+                prevState.form.subCat.splice(subCatSelected,1);
             }else{
-                preState.form.subCat.push(subCategory);
+                prevState.form.subCat.push(subCategory);
             }
 
-            return preState;
+            return prevState;
         })
     }
 

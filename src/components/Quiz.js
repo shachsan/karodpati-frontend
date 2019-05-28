@@ -99,8 +99,6 @@ const Quiz=props=>{
         <>
            
           <View style={styles.quizContainer}>
-            
-
             <View style={styles.question}>
               <Question
                 quiz={props.quiz}

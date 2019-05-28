@@ -3,14 +3,16 @@ import LifeLine from './lifeLine';
 import Quiz from './Quiz';
 import httpRequests from '../httpRequests';
 import {View, Text, StyleSheet} from 'react-native';
+import QuizEndReport from './QuizEndReport';
 
 const QuizContainer = props=>{
 
   const [id, setId] = useState(1);
   const [quiz, setQuiz] = useState([]);
-  const [fiftyFifty, setFiftyFifty] = useState(false)
-  const [quizPrepStarted, setQuizPrepStarted] = useState(false)
-  const [quizReady, setQuizReady] = useState(false)
+  const [endOfQuestion, setEndOfQuestion] = useState(false);
+  const [fiftyFifty, setFiftyFifty] = useState(false);
+  const [quizPrepStarted, setQuizPrepStarted] = useState(false);
+  const [quizReady, setQuizReady] = useState(false);
   const [correctAnswerCounter, setCorrectAnswerCounter] = useState(0);
   const [wrongAnswerCounter, setWrongAnswerCounter] = useState(0);
 
@@ -34,8 +36,13 @@ const QuizContainer = props=>{
   }
 
   const nextQuizHandler=()=>{
-    setId(id+1);
-    setFiftyFifty(false);
+    console.log('id:',id,'   quiz.length:', quiz.length );
+    if(id===quiz.length){
+      setEndOfQuestion(true);
+    }else{
+      setId(id+1);
+      setFiftyFifty(false);
+    }
   }
 
   const getQuiz=()=>{
@@ -50,19 +57,26 @@ const QuizContainer = props=>{
         <View style={styles.container}>
             {quiz.length > 0
             ? <>
-                
-                <LifeLine useFiftyFifty={fiftyFiftySelectHandler}></LifeLine>
-                <View style={styles.statusBar}>
-                  <Text>correct ans:{correctAnswerCounter}</Text>
-                  <Text>Incorrect ans:{wrongAnswerCounter}</Text>
-                  <Text style={{fontSize:15}}>Ques:{id}/{quiz.length}</Text>
-                </View>
-                <Quiz key={id} quiz={getQuiz()} 
-                      nextQuiz={nextQuizHandler}
-                      fiftyFifty={fiftyFifty}
-                      scoreHandler={scoreHandler}
-                />
-              </>
+              {!endOfQuestion ?
+                <>
+                  <LifeLine useFiftyFifty={fiftyFiftySelectHandler}></LifeLine>
+                  <View style={styles.statusBar}>
+                    <Text>correct ans:{correctAnswerCounter}</Text>
+                    <Text>Incorrect ans:{wrongAnswerCounter}</Text>
+                    <Text style={{fontSize:15}}>Ques:{id}/{quiz.length}</Text>
+                  </View>
+                  <Quiz key={id} quiz={getQuiz()} 
+                        nextQuiz={nextQuizHandler}
+                        fiftyFifty={fiftyFifty}
+                        scoreHandler={scoreHandler}
+                  />
+                </>
+                : <QuizEndReport 
+                      noOfCorrectAns={correctAnswerCounter}
+                      noOfWrongAns={wrongAnswerCounter}
+                      totalQuestions={quiz.length}
+                  />
+              }</>
             : null}
         </View>
     );
